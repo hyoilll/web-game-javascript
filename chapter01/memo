@@ -1,0 +1,50 @@
+NaN = Not a Number
+
+NaN == NaN
+false
+
+1 == '1'
+true
+
+////////////////////////////////////// == VS ===
+
+1 === '1'
+false
+
+NaN === NaN
+false
+비교연산자의 유일한 예외
+
+=> === 써라
+
+////////////////////////////////////// null vs undefined
+
+undefined - 컴퓨터가 넣어준 빈값
+
+null - 사용자가 넣은 빈값
+
+undefined대신 null써라 ㅅㄱ
+
+///////////////////////////////////// ""
+
+""는 빈 값이 아니고 문자임
+
+//////////////////////////////////////
+
+String to Number => Number(str)
+Number to String => String(num)
+
+const num = prompt("test");
+
+if (3 * 8 === Number(num))
+{
+    console.log("정답")
+}
+else
+{
+    console.log('틀림');
+}
+
+////////////////////////////////////// 거듭제곱 **
+
+3 ** 2 = 9
