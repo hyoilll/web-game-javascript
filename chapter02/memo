@@ -1,0 +1,43 @@
+
+.repeat()
+매개변수 갯수 만큼 반복함
+
+ex) 
+for (let i = 0; i < 5; ++i) {
+  console.log(
+    " ".repeat(Math.abs((5 - (i + 1 + i)) / 2)) +
+      "*".repeat(5 - ((Math.abs((5 - (i + 1 + i)) / 2) * 2)))
+  );
+}
+
+
+////////////////////////////////////////// object
+
+let func = {
+    add:function(a, b){
+        return a+b;
+    },
+    sub:function(a,b){
+        return a-b;
+    },
+    mul:function(a,b){
+        return a*b;
+    },
+    div:function(a,b){
+        return a/b;
+    },
+}
+
+let 네오 = {이름 : "네오", 나이 : 20, 키 :150};
+
+네오.이름 => 네오
+네오['이름'] => 네오
+
+네오.이름 vs 네오['이름']
+
+let 별명 = '이름';
+
+네오.별명 => error
+네오['별명'] => 네오
+
+대괄호 안에는 변수가 들어올 수 있음
