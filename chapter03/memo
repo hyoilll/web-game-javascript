@@ -1,0 +1,19 @@
+window
+ document
+
+window - 브라우저 전체 담당, 전역객체 
+ window.alert(); == alert();
+ window생략가능
+
+document - 화면을 담당 
+
+///////////////////////////////////////////////
+
+console.dir() - 객체 형식으로 볼 수 있음.
+
+DOM(Document Object Model)
+
+Html - Javascript를 통역해주는 역할
+
+///////////////////////////////////////////////
+
