@@ -21,6 +21,7 @@ const arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let question_arr = [];
 
 function createQuestion() {
+  chance = 10;
   question_arr = [];
   for (let i = 0; i < 4; ++i) {
     const temp = arr1.splice(Math.floor(Math.random() * arr1.length), 1)[0];
@@ -44,8 +45,6 @@ form.addEventListener("submit", function (event) {
 
   if (anwer === question_arr.join("")) {
     result.innerText = "홈런";
-    createQuestion();
-    console.log(question_arr.join(""));
   } else {
     //답이 틀리면
 
