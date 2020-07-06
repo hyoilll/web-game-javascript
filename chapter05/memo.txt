@@ -1,0 +1,6 @@
+foreach - 
+arr.forEach(function (row) {
+    row.forEach(function (col) {
+      col.innerText = "";
+    });
+  });
