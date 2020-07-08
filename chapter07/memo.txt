@@ -1,0 +1,26 @@
+setInterval() - 주어진 시간초 마다 계속 반복해서 실행
+
+querySelector() - 해당 클래스에 맞는 dom객체가 한개만 선택됨
+
+[참고] https://developer.mozilla.org/ko/docs/Web/API/Document/querySelectorAll
+querySelectorAll() - 해당 클래스에 맞는 dom객체가 모두 선택됨, 반환값은 NodeList
+elementList = parentNode.querySelectorAll(selectors);
+
+[참고] https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
+object to [key, value]array
+Object.entries(object) - object를 array로 바꿔 줌
+
+ex)
+const obj = { foo: 'bar', baz: 42 };
+console.log(Object.entries(obj)); // [ ['foo', 'bar'], ['baz', 42] ]
+
+//////////////////////////////////////////// 원하는 요소 찾기
+
+1차원 array
+array.indexOf()
+
+2차원 array
+array.findIndex()
+[참조] https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+arr.find(callback[, thisArg])
+array.find() - 반복문처럼 작동하여 원하는 것을 찾으면 (return true;) 해당 array 값을 반환 후 멈춤
