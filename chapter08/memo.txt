@@ -1,0 +1,10 @@
+contextmenu
+ 우클릭 이벤트
+ 우클릭하면 나오는 contextmenu창을 막기 위해선 event.preventDefault()
+ contextmenu의 기본 동작은 우클릭 메뉴생성
+
+currentTarget vs target
+
+Array.prototype.indexOf.call(target, search)
+ 배열이 아닌 요소를 배열처럼 만들어 indexOf가 돌아갈 수 있게 함
+ target에서 search를 찾아 index 반환
