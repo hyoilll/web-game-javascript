@@ -9,8 +9,10 @@ function pickRandomNumber(size, cnt) {
 
   let randomArr = [];
   for (let i = 0; i < cnt; ++i) {
-    const randomNum =
-      candidateArr[Math.floor(Math.random() * candidateArr.length)];
+    const randomNum = candidateArr.splice(
+      Math.floor(Math.random() * candidateArr.length),
+      1
+    )[0];
     randomArr.push(randomNum);
   }
 
@@ -18,11 +20,25 @@ function pickRandomNumber(size, cnt) {
 }
 
 let dataSet = [];
+
+//table, dataSet array 초기화
+function init(tbody) {
+  const trList = tbody.querySelectorAll("tr");
+  trList.forEach(function (item) {
+    item.remove();
+  });
+
+  dataSet = [];
+}
+
 //버튼 이벤트
 document.querySelector(".exec").addEventListener("click", function () {
   const hor = parseInt(document.querySelector(".hor").value);
   const ver = parseInt(document.querySelector(".ver").value);
   const mine = parseInt(document.querySelector(".mine").value);
+  if (hor * ver < mine) {
+    alert("마인이 너무 많음 알아서 새로고침해서 다시해라");
+  }
   console.log(hor, ver, mine);
 
   //mine갯수를 매개변수로 보내면 mine수 만큼의 랜덤 배열이 나옴
@@ -33,6 +49,9 @@ document.querySelector(".exec").addEventListener("click", function () {
 
   const tbody = document.querySelector(".table tbody");
   //  let dataSet = [];
+
+  //기존에 table이 있으면 삭제
+  init(tbody);
 
   for (let i = 0; i < ver; ++i) {
     const tr = document.createElement("tr");
@@ -52,8 +71,56 @@ document.querySelector(".exec").addEventListener("click", function () {
         );
         const col_line = Array.prototype.indexOf.call(parent_tr.children, td);
 
-        td.textContent = "!";
-        dataSet[row_line][col_line] = "!";
+        //우클릭시 차례대로 '!', '?', ''가 나오게함
+        let updateValue = "";
+        if (td.textContent === "" || td.textContent === "X") {
+          updateValue = "!";
+        } else if (td.textContent === "!") {
+          updateValue = "?";
+        } else if (td.textContent === "?") {
+          if (dataSet[row_line][col_line] === "X") {
+            updateValue = "X";
+          } else {
+            updateValue = "";
+          }
+        }
+
+        td.textContent = updateValue;
+      });
+      td.addEventListener("click", function (event) {
+        const parent_tr = event.currentTarget.parentNode;
+        const parent_tbody = event.currentTarget.parentNode.parentNode;
+
+        const row_line = Array.prototype.indexOf.call(
+          parent_tbody.children,
+          tr
+        );
+        const col_line = Array.prototype.indexOf.call(parent_tr.children, td);
+
+        console.log(row_line, col_line);
+
+        //주변 지뢰갯수 표시
+        let mineCnt = 0;
+        if (dataSet[row_line][col_line] === "X") {
+          td.textContent = "펑";
+          alert("지뢰밟았으니까 알아서 새로고침해서 다시해라");
+        } else {
+          for (let i = row_line - 1; i < row_line - 1 + 3; ++i) {
+            if (i < 0 || i >= ver) {
+              continue;
+            }
+            for (let j = col_line - 1; j < col_line - 1 + 3; ++j) {
+              if (j < 0 || j >= hor) {
+                continue;
+              }
+
+              if (dataSet[i][j] === "X") {
+                mineCnt++;
+              }
+            }
+          }
+          event.currentTarget.textContent = mineCnt; //지뢰숫자 알려줌
+        }
       });
       tr.appendChild(td);
       dataSet[i].push(td);
@@ -63,10 +130,28 @@ document.querySelector(".exec").addEventListener("click", function () {
 
   //지뢰 심기 ex)97
   for (let i = 0; i < shuffleArr.length; ++i) {
-    let ver = Math.floor(shuffleArr[i] / 10); // 9
-    let hor = shuffleArr[i] % 10; // 7
-    tbody.children[ver].children[hor].textContent = "X";
-    dataSet[ver][hor] = "X";
+    // let ver = Math.floor(shuffleArr[i] / 10); // 9
+    // let hor = shuffleArr[i] % 10; // 7
+
+    // tbody.children[ver].children[hor].textContent = "X";
+    // dataSet[ver][hor] = "X";
+
+    let row_line;
+    let col_line;
+
+    for (let j = 0; j < ver; ++j) {
+      const a = j * hor;
+      const b = a + hor;
+
+      if (a <= shuffleArr[i] && shuffleArr[i] < b) {
+        col_line = shuffleArr[i] % hor; //마지막 자리수 - 칸위치
+        row_line = j;
+        break;
+      }
+    }
+
+    //tbody.children[row_line].children[col_line].textContent = "X";
+    dataSet[row_line][col_line] = "X";
   }
 
   console.log(dataSet);

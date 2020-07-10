@@ -4,7 +4,18 @@ contextmenu
  contextmenu의 기본 동작은 우클릭 메뉴생성
 
 currentTarget vs target
+currentTarget - 이벤트가 연결되어있는 요소가 반환
+target - 실제 이벤트가 발생한 요소 반환
+
 
 Array.prototype.indexOf.call(target, search)
  배열이 아닌 요소를 배열처럼 만들어 indexOf가 돌아갈 수 있게 함
  target에서 search를 찾아 index 반환
+
+[참조] https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+Array.filter(callback)
+ callback함수의 조건에 맞는 요소들만 모아서 배열로 반환해줌
+
+[참조] https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/concat
+Array.concat
+ 기존배열은 변경하지 않고, 합쳐서 새로운 배열반환
