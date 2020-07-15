@@ -20,6 +20,8 @@ function pickRandomNumber(size, cnt) {
 }
 
 let dataSet = [];
+let stopFleg = false;
+let openArea = 0;
 
 //table, dataSet array 초기화
 function init(tbody) {
@@ -27,7 +29,8 @@ function init(tbody) {
   trList.forEach(function (item) {
     item.remove();
   });
-
+  openArea = 0;
+  stopFleg = false;
   dataSet = [];
 }
 
@@ -61,6 +64,9 @@ document.querySelector(".exec").addEventListener("click", function () {
       //right-click event
       td.addEventListener("contextmenu", function (event) {
         event.preventDefault();
+        if (stopFleg === true) {
+          return;
+        }
 
         const parent_tr = event.currentTarget.parentNode;
         const parent_tbody = event.currentTarget.parentNode.parentNode;
@@ -88,6 +94,9 @@ document.querySelector(".exec").addEventListener("click", function () {
         td.textContent = updateValue;
       });
       td.addEventListener("click", function (event) {
+        if (stopFleg === true) {
+          return;
+        }
         const parent_tr = event.currentTarget.parentNode;
         const parent_tbody = event.currentTarget.parentNode.parentNode;
 
@@ -97,14 +106,22 @@ document.querySelector(".exec").addEventListener("click", function () {
         );
         const col_line = Array.prototype.indexOf.call(parent_tr.children, td);
 
-        console.log(row_line, col_line);
-
         //주변 지뢰갯수 표시
         let mineCnt = 0;
         if (dataSet[row_line][col_line] === "X") {
           td.textContent = "펑";
           alert("지뢰밟았으니까 알아서 새로고침해서 다시해라");
+          stopFleg = true;
         } else {
+          td.classList.add("opend");
+          if (dataSet[row_line][col_line] === 1) {
+            return;
+          } else {
+            dataSet[row_line][col_line] = 1;
+          }
+          openArea++;
+          console.log(openArea);
+
           for (let i = row_line - 1; i < row_line - 1 + 3; ++i) {
             if (i < 0 || i >= ver) {
               continue;
@@ -119,12 +136,66 @@ document.querySelector(".exec").addEventListener("click", function () {
               }
             }
           }
-          event.currentTarget.textContent = mineCnt; //지뢰숫자 알려줌
+          //거짓인 값 : false, '', 0, null, undefined, NaN이 오면 ''넣어라
+          //event.currentTarget.textContent = mineCnt || '';
+          if (mineCnt !== 0) {
+            event.currentTarget.textContent = mineCnt; //지뢰숫자 알려줌
+          } else {
+            //주변에 지뢰가 한개도 없으면 주변 8칸 동시 오픈 (재귀)
+            let aroundArea = [];
+
+            if (tbody.children[row_line - 1]) {
+              aroundArea = aroundArea.concat([
+                tbody.children[row_line - 1].children[col_line - 1],
+                tbody.children[row_line - 1].children[col_line],
+                tbody.children[row_line - 1].children[col_line + 1],
+              ]);
+            }
+
+            aroundArea = aroundArea.concat([
+              tbody.children[row_line].children[col_line - 1],
+              tbody.children[row_line].children[col_line + 1],
+            ]);
+
+            if (tbody.children[row_line + 1]) {
+              aroundArea = aroundArea.concat([
+                tbody.children[row_line + 1].children[col_line - 1],
+                tbody.children[row_line + 1].children[col_line],
+                tbody.children[row_line + 1].children[col_line + 1],
+              ]);
+            }
+
+            aroundArea
+              .filter(function (v) {
+                return !!v; //undefined, null, 0, '' 을 제거
+              })
+              .forEach(function (around) {
+                const tempTr = around.parentNode;
+                const tempTbody = around.parentNode.parentNode;
+
+                const tempRow = Array.prototype.indexOf.call(
+                  tempTbody.children,
+                  tempTr
+                );
+                const tempCol = Array.prototype.indexOf.call(
+                  tempTr.children,
+                  around
+                );
+                if (dataSet[tempRow][tempCol] !== 1) {
+                  around.click();
+                }
+              });
+          }
+        }
+        if (hor * ver - mine === openArea) {
+          alert("승리했습니다");
+          stopFleg = true;
         }
       });
       tr.appendChild(td);
       dataSet[i].push(td);
     }
+
     tbody.appendChild(tr);
   }
 

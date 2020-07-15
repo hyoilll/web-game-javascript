@@ -19,3 +19,18 @@ Array.filter(callback)
 [참조] https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/concat
 Array.concat
  기존배열은 변경하지 않고, 합쳐서 새로운 배열반환
+
+클로저
+ 클로저란 내부함수가 외부함수의 지역변수에 접근 할 수 있고, 
+ 외부함수는 외부함수의 지역변수를 사용하는 내부함수가 소멸될 때까지 
+ 소멸되지 않는 특성을 의미한다.
+ 
+ (function 클로저 (i){
+     setTimeout(function(){
+         console.log(i)
+     }, i * 1000)
+ })(i);
+ 
+ 비동기함수는 실행할 때가 되야 내부 변수를 정하기 때문에 외부의 변수를 기억해 놓을 필요가 있음
+ setTimeout의 익명함수가 실행할 때 정해진 i는 외부함수의 i
+ 익명함수가 클로저 특성으로 외부변수를 이용하기에 외부환경까지 기억을 함
