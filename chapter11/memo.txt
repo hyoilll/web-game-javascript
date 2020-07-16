@@ -1,0 +1,2 @@
+card.classList.toggle("flipped");
+ card의 클래스네임에 flipped를 넣었다 뻇다 반복
