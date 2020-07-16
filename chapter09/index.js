@@ -4,6 +4,14 @@ let times = [];
 
 let startTime;
 let cancleTime;
+let endTime;
+
+function init() {
+  cancleTime = 0;
+  startTime = 0;
+  endTime = 0;
+  console.log("init");
+}
 
 screen.addEventListener("click", function (e) {
   if (screen.classList.contains("waiting")) {
@@ -22,6 +30,7 @@ screen.addEventListener("click", function (e) {
       screen.classList.remove("ready");
       screen.classList.add("waiting");
       screen.textContent = "너무 빨리 클릭함 다시 시도";
+      init();
     } else {
       screen.classList.remove("ready");
       screen.classList.add("now");
@@ -32,9 +41,10 @@ screen.addEventListener("click", function (e) {
     screen.classList.add("waiting");
     screen.textContent = "클릭해서 시작";
 
-    const endTime = new Date();
+    endTime = new Date();
     const result = endTime - startTime;
     times.push(result);
     console.log(result / 1000);
+    init();
   }
 });

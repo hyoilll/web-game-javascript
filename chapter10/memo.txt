@@ -1,0 +1,2 @@
+Array.filter(function(){return true})
+ return 값이 true일 경우 fliter에 통과함
