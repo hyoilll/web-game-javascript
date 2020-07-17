@@ -1,0 +1,27 @@
+call by value VS call by reference
+ javascript에는 call by reference가 없음
+ 기본적으로 원시값은 복사로 넘어가고, 객체는 참조로 넘어가지만
+ 객체 속성 수정 시에는 참조관계이지만, 객체 인스턴스 자체를 수정할
+ 시에는 참조관계가 깨짐
+
+ ex) 1 참조관계로 적용됨
+ function fun(num)
+ {
+     num.a = 10;
+     console.log(num); // a:10
+ }
+ let obj = {a:5};
+ fun(obj);
+ console.log(obj) // a:10
+
+ex) 2 참조관계가 깨짐, 아예 다른 변수임
+ function fun(num)
+ {
+     num = 10;
+     console.log(num); // 10
+ }
+ let obj = {a:5};
+ fun(obj);
+ console.log(obj) // a:5
+
+ 

@@ -53,6 +53,7 @@ funciton createCard (name, att, hp)
     return card;
 }
 
+//factory patten prototype
 왜 prototype을 쓰는가?? => 추가, 수정, 삭제가 간편해짐
  createCard를 통해서 이미 만들어진 100장카드의 type을 장난감으로 바꾸라고 지시가 내려왔다.
  한장한장 반복문을 돌려서 바꿀 수도 있다. 하지만 더 쉬운 방법을 찾고 싶다. 그게 바로
@@ -89,3 +90,50 @@ funciton createCard (name, att, hp)
  객체끼리의 얕은 복사가 이뤄지고있다.
  => card obj가 prototype을 __proto__형식으로 갖게 해줌
  고로 prototype의 값을 바꾸면 card의 값도 바뀌게 되는 것!!!
+
+//constructor type prototype
+let prototype = {
+    type:'card',
+}
+//생성자 이름규칙 첫글자 대문자
+function Card(name, att, hp)
+{
+    //but new Card()로 생성해주면 this는 obj로 변환됨. obj.name
+    this.name = name;
+    this.att = att;
+    this.hp = hp;
+}
+Card.prototype = prototype;
+
+const obj = new Card('hyoil', 1, 1);
+
+////////////////////this는 함수는 호출하는 방법에 의해 결정된다.
+ 호출한놈 === this
+ 누가 호출했느냐가 중요
+
+ const someone = {
+     name : 'hyoil',
+     whoAmI : function(){
+         console.log(this);
+     }
+ };
+
+ someone.whoAmI(); 
+ // console.log(someone)과 같음
+ // someone이 this를 실행하는 함수 whoAmI()를 호출했음
+
+ const myWhoAmI = someone.whoAmI;
+ myWhoAmI(); 
+ // console.log(window)과 같음
+ // window가 this를 실행하는 함수 whoAmI()를 호출했음
+ 
+ const btn = document.getElementById('btn');
+ btn.addEventListener('click', myWhoAmI);
+ // console.log(btn) 과 같음
+ // btn가 this를 실행하는 함수 whoAmI()를 호출했음
+
+ 예외) 호출하는 놈과 무관하게 bind를 통해 묶어줄 수 있음
+ const bindThis = myWhoAmI.bind(someone)
+ bindThis();
+ // console.log(someone)과 똑같음
+ // this를 someone으로 묶어논 것
