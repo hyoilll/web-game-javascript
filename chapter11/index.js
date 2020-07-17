@@ -134,7 +134,7 @@ function 카드세팅(가로, 세로) {
   document.body.appendChild(gameExplain);
 
   //버튼 클릭시 이벤트
-  startBtn.addEventListener("click", function () {
+  startBtn.addEventListener("click", function (e) {
     //btnFleg가 true면 카드를 보여줌
     if (btnFleg === true) {
       //이미 버튼이 눌렸으니 false로 바꿔서 또 못누르게 막음
@@ -145,11 +145,17 @@ function 카드세팅(가로, 세로) {
       const cards = document.querySelectorAll(".card");
 
       //샤라락~ 한장씩 뒤집
-      cards.forEach(function (card, idx) {
+      // cards.forEach(function (card, idx) {
+      //   setTimeout(function () {
+      //     card.classList.toggle("flipped");
+      //   }, 100 * idx);
+      // });
+
+      for (let i = 0; i < cards.length; ++i) {
         setTimeout(function () {
-          card.classList.toggle("flipped");
-        }, 100 * idx);
-      });
+          cards[i].classList.toggle("flipped");
+        }, 100 * i);
+      }
 
       //한번에 모든 카드를 뒤집음
       setTimeout(function () {
