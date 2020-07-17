@@ -50,6 +50,9 @@ function checkResult() {
 }
 
 function 카드세팅(가로, 세로) {
+  //뒷면 색을 섞어줌
+  suffleColor();
+
   for (var i = 0; i < 가로 * 세로; ++i) {
     var card = document.createElement("div");
     card.classList.add("card");
@@ -84,7 +87,7 @@ function 카드세팅(가로, 세로) {
         } else {
           //btn을 먼저 눌러서 색을 확인 하고 시작할 수 있음
           alert(
-            "先ずはボタンを押して、カードの色を確認してから始めてください。"
+            "先ずはボタンを押して、カードの色を確認してから始めてください。먼저 버튼을 누르고, 카드의 색을 확인하고 나서 시작해주세요"
           );
         }
 
@@ -121,17 +124,14 @@ function 카드세팅(가로, 세로) {
 
     document.body.appendChild(card);
   }
+}
 
-  //버튼 생성
+//START 버튼 생성 및 이벤트
+function startBtnSetting() {
   const startBtn = document.createElement("button");
   startBtn.textContent = "START";
+  startBtn.className = "start";
   document.body.appendChild(startBtn);
-
-  //게임 설명 생성
-  const gameExplain = document.createElement("div");
-  gameExplain.textContent =
-    "STARTボタンを押したらカードの色を見られる時間3秒あげられます、よく見て当ててください";
-  document.body.appendChild(gameExplain);
 
   //버튼 클릭시 이벤트
   startBtn.addEventListener("click", function (e) {
@@ -144,6 +144,7 @@ function 카드세팅(가로, 세로) {
 
       const cards = document.querySelectorAll(".card");
 
+      //fireFox에서 forEach가 안먹어서 for로 바꿧음
       //샤라락~ 한장씩 뒤집
       // cards.forEach(function (card, idx) {
       //   setTimeout(function () {
@@ -157,6 +158,7 @@ function 카드세팅(가로, 세로) {
         }, 100 * i);
       }
 
+      //fireFox에서 forEach가 안먹어서 for로 바꿧음
       //한번에 모든 카드를 뒤집음
       // setTimeout(function () {
       //   cards.forEach(function (card, idx) {
@@ -170,13 +172,36 @@ function 카드세팅(가로, 세로) {
 
         //카드를 다시 원상태로 돌려놨으니 이제 게임을 시작해도됨
         startFleg = true;
-        //카드가 다시 원상태로 돌아왔으니 btn을 다시 누를 수 있음
-        btnFleg = true;
       }, 3000);
     }
   });
 }
-//뒷면 색을 섞어줌
-suffleColor();
+//게임 설명 생성
+function createGameExp() {
+  const Japanese = document.createElement("div");
+  Japanese.textContent =
+    "STARTボタンを押したらカードの色を見られる時間3秒与えられます、カードを2枚選んで色を合わせてください";
+  document.body.appendChild(Japanese);
+  const korean = document.createElement("div");
+  korean.textContent =
+    "시작 버튼을 누르고 카드의 색을 확인할 수 있는 시간 3초가 주어집니다, 카드를 2장 선택해서 색을 맞춰주세요";
+  document.body.appendChild(korean);
+}
+//RESET 버튼 생성 및 이벤트
+function resetBtnSetting() {
+  const form = document.createElement("form");
+  const inputReset = document.createElement("input");
+  inputReset.type = "submit";
+  inputReset.value = "RESET";
+  form.appendChild(inputReset);
+  document.body.appendChild(form);
+}
+
 //카드 생성
 카드세팅(가로, 세로);
+//START Btn 생성
+startBtnSetting();
+//RESET Btn 생성
+resetBtnSetting();
+//게임 설명 생성
+createGameExp();
