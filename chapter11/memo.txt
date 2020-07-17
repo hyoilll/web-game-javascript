@@ -1,2 +1,14 @@
 card.classList.toggle("flipped");
  card의 클래스네임에 flipped를 넣었다 뻇다 반복
+
+적용된 태크 지우기
+ document.querySelector('').innerHTML = ''
+
+
+얕은복사 끊기
+ arr1 = [1,2,3]
+ arr2 = arr1.slice();
+ 얕은복사가 아닌 깊은복사가 됨
+
+ 
+ 

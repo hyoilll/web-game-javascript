@@ -100,24 +100,28 @@ function 카드세팅(가로, 세로) {
           const secondColor =
             cards[1].childNodes[0].childNodes[1].style.backgroundColor;
 
-          setTimeout(function () {
-            //같으면 그대로 두고
-            if (firstColor === secondColor) {
-              cards.forEach(function (card) {
-                card.classList.toggle("end");
-              });
-              checkResult();
-            } else {
-              //같지 않으면 toggle('flipped') 뒤집어줌
-              cards.forEach(function (card) {
-                card.classList.toggle("flipped");
-              });
-            }
-            //배열 비워주고
-            cards = [];
-            //결과를 봤으니 클릭할 수 있게 해줌
-            clickFleg = true;
-          }, 1000);
+          setTimeout(
+            function () {
+              //같으면 그대로 두고
+              if (firstColor === secondColor) {
+                cards.forEach(function (card) {
+                  card.classList.toggle("end");
+                });
+                checkResult();
+              } else {
+                //같지 않으면 toggle('flipped') 뒤집어줌
+                cards.forEach(function (card) {
+                  card.classList.toggle("flipped");
+                });
+              }
+              //배열 비워주고
+              cards = [];
+              //결과를 봤으니 클릭할 수 있게 해줌
+              clickFleg = true;
+            },
+            1000,
+            true
+          );
         }
       });
     })(card);
@@ -153,9 +157,13 @@ function startBtnSetting() {
       // });
 
       for (let i = 0; i < cards.length; ++i) {
-        setTimeout(function () {
-          cards[i].classList.toggle("flipped");
-        }, 100 * i);
+        setTimeout(
+          function () {
+            cards[i].classList.toggle("flipped");
+          },
+          100 * i,
+          true
+        );
       }
 
       //fireFox에서 forEach가 안먹어서 for로 바꿧음
@@ -165,14 +173,18 @@ function startBtnSetting() {
       //     card.classList.toggle("flipped");
       //   });
 
-      setTimeout(function () {
-        for (let i = 0; i < cards.length; ++i) {
-          cards[i].classList.toggle("flipped");
-        }
+      setTimeout(
+        function () {
+          for (let i = 0; i < cards.length; ++i) {
+            cards[i].classList.toggle("flipped");
+          }
 
-        //카드를 다시 원상태로 돌려놨으니 이제 게임을 시작해도됨
-        startFleg = true;
-      }, 3000);
+          //카드를 다시 원상태로 돌려놨으니 이제 게임을 시작해도됨
+          startFleg = true;
+        },
+        3000,
+        true
+      );
     }
   });
 }
