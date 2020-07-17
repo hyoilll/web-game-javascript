@@ -1,7 +1,7 @@
-var 가로 = 4;
-var 세로 = 3;
+const 가로 = 4;
+const 세로 = 3;
 
-var 색깔 = [
+let 색깔 = [
   "red",
   "orange",
   "green",
@@ -53,17 +53,17 @@ function 카드세팅(가로, 세로) {
   //뒷면 색을 섞어줌
   suffleColor();
 
-  for (var i = 0; i < 가로 * 세로; ++i) {
-    var card = document.createElement("div");
+  for (let i = 0; i < 가로 * 세로; ++i) {
+    let card = document.createElement("div");
     card.classList.add("card");
 
-    var cardInner = document.createElement("div");
+    let cardInner = document.createElement("div");
     cardInner.classList.add("card-inner");
 
-    var cardFront = document.createElement("div");
+    let cardFront = document.createElement("div");
     cardFront.classList.add("card-front");
 
-    var cardBack = document.createElement("div");
+    let cardBack = document.createElement("div");
     cardBack.classList.add("card-back");
     cardBack.style.backgroundColor = 색뽑기();
 
@@ -172,7 +172,7 @@ function startBtnSetting() {
 
         //카드를 다시 원상태로 돌려놨으니 이제 게임을 시작해도됨
         startFleg = true;
-      }, 10000);
+      }, 3000);
     }
   });
 }

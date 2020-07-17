@@ -4,16 +4,88 @@ card.classList.toggle("flipped");
 적용된 태크 지우기
  document.querySelector('').innerHTML = ''
 
-얕은복사 끊기
- arr1 = [1,2,3]
- arr2 = arr1.slice();
- 얕은복사가 아닌 깊은복사가 됨
-
-Object Deep copy
- let obj1 = {a:1, b:2, c:3}
- let obj2 = {};
+Object Deep copy (1단계 obj 일때만)
+ 1. let obj1 = {a:1, b:2, c:3}
+    let obj2 = {};
  
- Object.keys(obj1) // : ['a', 'b', 'c']
- Object.keys(obj1).forEach(function(key){
-     obj2[key] = obj[key]
- })
+    Object.keys(obj1) // : ['a', 'b', 'c']
+    Object.keys(obj1).forEach(function(key){
+        obj2[key] = obj[key]
+    })
+
+ 2. arr1 = [1,2,3]
+    arr2 = arr1.slice();
+
+ 3. Object.assign(obj2, obj1)
+
+deep copy최종 결론
+ obj2 = JSON.parse(JSON.stringify(obj1))
+ 하면 deep copy 됨 but 성능이 최악이라 최대한 안쓰는게 좋음
+
+참조관계인지 확인하는 것
+obj === obj2 => true: 참조관계
+
+//////////////////////////////////////////////////////////////prototype
+let prototype = {
+    type: 'card'
+    attack: function(){},
+    defend: function(){},
+}
+
+funciton createCard (name, att, hp)
+{
+    let card = {
+        name: name,
+        att: att,
+        hp: hp,
+    }
+    
+    //__proto__은 생략가능 => but __proto__은 쓰지않는게 좋음
+    card.__proto__ = prototype;
+
+    ///////////////////////////////////대안
+
+    let card = Object.create(prototype);
+    card.name = name;
+    card.att = att;
+    card.hp = hp;
+    
+    return card;
+}
+
+왜 prototype을 쓰는가?? => 추가, 수정, 삭제가 간편해짐
+ createCard를 통해서 이미 만들어진 100장카드의 type을 장난감으로 바꾸라고 지시가 내려왔다.
+ 한장한장 반복문을 돌려서 바꿀 수도 있다. 하지만 더 쉬운 방법을 찾고 싶다. 그게 바로
+ prototype이다.
+
+ let card1 = createCard('a',1,1);
+ let card2 = createCard('b',2,2);
+ let card3 = createCard('c',3,3);
+ ...
+ let card100 = createCard('zz',100,100);
+ 
+ card1.type => 'card'
+ card2.type => 'card'
+ card3.type => 'card'
+ ...
+ card100.type => 'card'
+ 
+ 선언했던 prototype에서 type을 card -> 장난감 으로 변경만 해주면
+ 100장의 카드의 type에 모두 반영된다
+ let prototype = {
+    type: '장난감'
+    attack: function(){},
+    defend: function(){},
+ }
+
+ card1.type => '장난감'
+ card2.type => '장난감'
+ card3.type => '장난감'
+ ...
+ card100.type => '장난감'
+ 
+ => 얕은복사(Shallow Copy)의 성질을 이용한 방법이다
+ line:48 를 통해서 let card = Object.create(prototype); 
+ 객체끼리의 얕은 복사가 이뤄지고있다.
+ => card obj가 prototype을 __proto__형식으로 갖게 해줌
+ 고로 prototype의 값을 바꾸면 card의 값도 바뀌게 되는 것!!!
