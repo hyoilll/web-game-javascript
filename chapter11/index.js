@@ -158,10 +158,15 @@ function 카드세팅(가로, 세로) {
       }
 
       //한번에 모든 카드를 뒤집음
+      // setTimeout(function () {
+      //   cards.forEach(function (card, idx) {
+      //     card.classList.toggle("flipped");
+      //   });
+
       setTimeout(function () {
-        cards.forEach(function (card, idx) {
-          card.classList.toggle("flipped");
-        });
+        for (let i = 0; i < cards.length; ++i) {
+          cards[i].classList.toggle("flipped");
+        }
 
         //카드를 다시 원상태로 돌려놨으니 이제 게임을 시작해도됨
         startFleg = true;
