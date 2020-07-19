@@ -24,4 +24,10 @@ ex) 2 참조관계가 깨짐, 아예 다른 변수임
  fun(obj);
  console.log(obj) // a:5
 
+ /////////////////////////////////////////////cloneNode
+
+ [참조] https://developer.mozilla.org/ko/docs/Web/API/Node/cloneNode
  
+ var dupNode = node.cloneNode(deep);
+
+ deep : 해당 node의 children 까지 복제하려면 true, 해당 node 만 복제하려면 false

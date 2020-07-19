@@ -40,32 +40,32 @@
       }
       .card-att,
       .card-hp {
-        width: 15px;
-        height: 15px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         display: inline-block;
         position: absolute;
         bottom: 0px;
         border: 1px solid black;
         text-align: center;
-        font-size: 11px;
+        font-size: 12px;
         /* 해당 글자를 감싸는 박스 객체와 높이를 같이 설정해주면 수직 중앙 정렬됨 */
-        line-height: 15px;
+        line-height: 20px;
         color: white;
       }
       .card-cost {
-        width: 15px;
-        height: 15px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         display: inline-block;
         position: absolute;
         top: 0px;
-        right: 0px;
+        left: 0px;
         border: 1px solid black;
         text-align: center;
-        font-size: 11px;
+        font-size: 12px;
         /* 해당 글자를 감싸는 박스 객체와 높이를 같이 설정해주면 수직 중앙 정렬됨 */
-        line-height: 15px;
+        line-height: 20px;
         background: black;
         color: white;
       }
@@ -77,6 +77,10 @@
         background: red;
         right: 0px;
       }
+
+      .card-hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -85,116 +89,41 @@
         코스트:
         <span>10</span>
       </div>
-      <div class="rival-hero">
-        <div class="card" style="margin-bottom: 8px;">
-          <div class="card-name">상대방 영웅</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-      </div>
-      <div class="rival-cards">
-        <div class="card">
-          <div class="card-cost">2</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-        <div class="card">
-          <div class="card-cost">2</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-        <div class="card">
-          <div class="card-cost">2</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-      </div>
+      <div class="rival-hero"></div>
+      <div class="rival-cards" style="height: 150px;"></div>
     </div>
     <div class="rival-deck">
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
+      <div>덱</div>
     </div>
     <hr />
     <div class="my">
-      <div class="my-cards">
-        <div class="card">
-          <div class="card-cost">2</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-        <div class="card">
-          <div class="card-cost">2</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-        <div class="card">
-          <div class="card-cost">2</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-      </div>
-      <div class="my-hero">
-        <div class="card">
-          <div class="card-name">내 영웅</div>
-          <div class="card-att">5</div>
-          <div class="card-hp">10</div>
-        </div>
-      </div>
+      <div class="my-cards" style="height: 150px;"></div>
+      <div class="my-hero"></div>
       <div class="rival-cost">
         코스트:
         <span>10</span>
       </div>
     </div>
     <div class="my-deck">
+      <div>덱</div>
+    </div>
+    <!-- cloneNode하기위해 만듬 -->
+    <!-- hero -->
+    <div class="card-hidden hero">
       <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
-      </div>
-      <div class="card">
-        <div class="card-cost">2</div>
-        <div class="card-att">5</div>
-        <div class="card-hp">10</div>
+        <div class="card-att"></div>
+        <div class="card-hp"></div>
       </div>
     </div>
+    <!-- deck -->
+    <div class="card-hidden deck">
+      <div class="card">
+        <div class="card-cost"></div>
+        <div class="card-att"></div>
+        <div class="card-hp"></div>
+      </div>
+    </div>
+    <!-- --------------------- -->
     <script src="index.js"></script>
   </body>
 </html>
