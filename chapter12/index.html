@@ -81,12 +81,18 @@
       .card-hidden {
         display: none;
       }
+
+      .turnBtn {
+        position: relative;
+        top: 19px;
+      }
     </style>
   </head>
   <body>
     <div class="rival">
-      <div class="rival-cost">
+      <div>
         코스트:
+        <span class="rival-cost">10</span> /
         <span>10</span>
       </div>
       <div class="rival-hero"></div>
@@ -95,12 +101,16 @@
     <div class="rival-deck">
       <div>덱</div>
     </div>
+    <div class="turnBtn">
+      <button class="turn">MyTurn</button>
+    </div>
     <hr />
     <div class="my">
-      <div class="my-cards" style="height: 150px;"></div>
+      <div class="my-cards" style="height: 170px;"></div>
       <div class="my-hero"></div>
-      <div class="rival-cost">
+      <div>
         코스트:
+        <span class="my-cost">10</span> /
         <span>10</span>
       </div>
     </div>
