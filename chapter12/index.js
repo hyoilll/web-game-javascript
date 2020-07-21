@@ -1,43 +1,49 @@
 const body = document.body;
 
-const rival_hero = document.querySelector(".rival-hero");
-const rival_deck = document.querySelector(".rival-deck");
-const rival_field = document.querySelector(".rival-cards");
-const rival_cost = document.querySelector(".rival-cost");
+const rival = {
+  //dom
+  hero: document.querySelector(".rival-hero"),
+  deck: document.querySelector(".rival-deck"),
+  field: document.querySelector(".rival-cards"),
+  cost: document.querySelector(".rival-cost"),
+  //data
+  deck_datas: [],
+  hero_data: [],
+  field_datas: [],
+  //attack-card
+  attackCard: null,
+};
 
-const my_hero = document.querySelector(".my-hero");
-const my_deck = document.querySelector(".my-deck");
-const my_field = document.querySelector(".my-cards");
-const my_cost = document.querySelector(".my-cost");
+const my = {
+  //dom
+  hero: document.querySelector(".my-hero"),
+  deck: document.querySelector(".my-deck"),
+  field: document.querySelector(".my-cards"),
+  cost: document.querySelector(".my-cost"),
+  //data
+  deck_datas: [],
+  hero_data: [],
+  field_datas: [],
+  //attack-card
+  attackCard: null,
+};
 
 const turnBtn = document.querySelector(".turn");
-
-//deck data 저장
-let rival_deck_datas = [];
-let my_deck_datas = [];
-
-//hero data 저장
-let rival_hero_data;
-let my_hero_data;
-
-//field data 저장
-let rival_field_datas = [];
-let my_field_datas = [];
 
 //turn
 //true : my
 //false : rival
 let turn = true;
 
-//btn - click event => 턴 넘기가
+//btn - click event => 턴 넘기기
 turnBtn.addEventListener("click", function (e) {
   //턴을 넘길 때 마다 코스트를 채워줌
   if (turn) {
     //내 코스트 채움
-    my_cost.textContent = 10;
+    my.cost.textContent = 10;
   } else {
     //상대 코스트 채움
-    rival_cost.textContent = 10;
+    rival.cost.textContent = 10;
   }
 
   //공수교대
@@ -58,6 +64,31 @@ function disconnetionCardToDom(card, dom) {
       e.remove();
     }
   });
+}
+
+//deck -> field
+function moveDectToField(card, data, cost, obj) {
+  //data에 맞는 index를 찾아서 datas[]에서 삭제
+  const idx = obj.deck_datas.indexOf(data);
+  obj.deck_datas.splice(idx, 1);
+
+  //화면에서 deck 카드 삭제
+  disconnetionCardToDom(card, obj.deck);
+
+  //field에 추가
+  obj.field_datas.push(card);
+  connectCardToDom(data, obj.field, false);
+
+  //obj is my = true / obj is rival = false
+  const isTurn = obj === my ? true : false;
+
+  //deck에서 감소된 만큼 다시 deck 카드 충원해줌
+  const newCard = createCard(false, isTurn);
+  obj.deck_datas.push(newCard);
+  connectCardToDom(newCard, obj.deck, false);
+
+  //cost 감소
+  obj.cost.textContent = String(cost - Number(data.cost));
 }
 
 //카드 - 돔 연결
@@ -86,60 +117,103 @@ function connectCardToDom(data, dom, isHero) {
     const parentNodeName = card.parentNode.className;
     //deck에 있는 카드만 필드에 올라갈 수 있도록해줌
     if (parentNodeName === "my-deck" || parentNodeName === "rival-deck") {
-      let idx = 0;
       let cost = 0;
       if (turn) {
-        cost = Number(my_cost.textContent);
+        cost = Number(my.cost.textContent);
         //내 턴인데 상대 카드를 누르면 그대로 종료
         //현재 cost가 카드의 cost보다 적으면 소환 불가
-        if (!data.isTurn || cost < data.cost || data.field) {
+        if (!data.isTurn || cost < data.cost) {
           return;
         }
 
-        //data에 맞는 index를 찾아서 datas[]에서 삭제
-        idx = my_deck_datas.indexOf(data);
-        my_deck_datas.splice(idx, 1);
-
-        //화면에서 deck 카드 삭제
-        disconnetionCardToDom(card, my_deck);
-
-        //field에 추가
-        my_field_datas.push(card);
-        connectCardToDom(data, my_field, false);
-
-        //deck에서 감소된 만큼 다시 deck 카드 충원해줌
-        const newCard = createCard(false, true);
-        my_deck_datas.push(newCard);
-        connectCardToDom(newCard, my_deck, false);
-
-        //cost 감소
-        my_cost.textContent = String(cost - Number(data.cost));
+        moveDectToField(card, data, cost, my);
       } else {
-        cost = Number(rival_cost.textContent);
+        cost = Number(rival.cost.textContent);
         //상대 턴인데 내 카드를 누르면 그대로 종료
         //현재 cost가 카드의 cost보다 적으면 소환 불가
         if (data.isTurn || cost < data.cost) {
           return;
         }
 
-        //data에 맞는 index를 찾아서 datas[]에서 삭제
-        idx = rival_deck_datas.indexOf(data);
-        rival_deck_datas.splice(idx, 1);
+        moveDectToField(card, data, cost, rival);
+      }
+    } else {
+      if (turn) {
+        //내 턴이여서 공격카드를 먼저 선택해야 하는데
+        //내 공격카드 선택안하고 상대방카드 먼저 선택하면 return
+        if (my.attackCard === null && !data.isTurn) {
+          return;
+        }
+      } else {
+        if (rival.attackCard === null && data.isTurn) {
+          return;
+        }
+      }
 
-        //화면에서 deck 카드 삭제
-        disconnetionCardToDom(card, rival_deck);
+      //field, hero 영역의 카드를 선택하면 공격할 수 있도록 표시해줌
+      const grandCard = card.parentNode.parentNode;
+      grandCard.querySelectorAll(".card").forEach(function (c) {
+        c.classList.remove("card-selected");
+      });
+      card.classList.toggle("card-selected");
 
-        //field에 추가
-        rival_field_datas.push(card);
-        connectCardToDom(data, rival_field, false);
+      //turn : true = my / false = rival
+      //data.isTurn : true = my / false = rival
+      if (turn !== data.isTurn) {
+        //공격
+        console.log("attack");
 
-        //deck에서 감소된 만큼 다시 deck 카드 충원해줌
-        const newCard = createCard(false, false);
-        rival_deck_datas.push(newCard);
-        connectCardToDom(newCard, rival_deck, false);
+        const attObj = turn === true ? my : rival;
+        const attPower = Number(
+          attObj.attackCard.querySelector(".card-att").textContent
+        );
 
-        //cost 감소
-        rival_cost.textContent = String(cost - Number(data.cost));
+        data.hp = Number(data.hp) - attPower;
+
+        const hitObj = attObj === my ? rival : my;
+
+        //if hp가 1보다 작아지면 카드 없어짐
+        if (data.hp < 1) {
+          if (data.hero) {
+            //영웅이 죽었으면 게임 끝
+            if (turn) {
+              alert("my팀이 이겼습니다.");
+            } else {
+              alert("rival팀이 이겼습니다");
+            }
+            return;
+          } else {
+            //data에 맞는 index를 찾아서 datas[]에서 삭제
+            const idx = hitObj.field_datas.indexOf(data);
+            hitObj.field_datas.splice(idx, 1);
+            //dom 해제
+            disconnetionCardToDom(card, hitObj.field);
+          }
+        }
+
+        card.querySelector(".card-hp").textContent = String(data.hp);
+
+        //공격 했으니 턴 넘겨주고
+        turnBtn.click();
+
+        //카드 선택해제
+        attObj.attackCard.classList.toggle("card-selected");
+        card.classList.toggle("card-selected");
+
+        //attack 카드 초기화
+        rival.attackCard = null;
+        my.attackCard = null;
+        return;
+      }
+
+      if (turn) {
+        //my 카드에 attack카드 추가
+        my.attackCard = card;
+        console.log("true");
+      } else {
+        //rival 카드에 attack카드 추가
+        rival.attackCard = card;
+        console.log("false");
       }
     }
   });
@@ -151,40 +225,40 @@ function connectCardToDom(data, dom, isHero) {
 function createRivalDeck(cnt) {
   for (let i = 0; i < cnt; ++i) {
     const deck = createCard(false, false);
-    rival_deck_datas.push(deck);
+    rival.deck_datas.push(deck);
   }
 
-  rival_deck_datas.forEach(function (data) {
-    connectCardToDom(data, rival_deck, false);
+  rival.deck_datas.forEach(function (data) {
+    connectCardToDom(data, rival.deck, false);
   });
 }
 
 //상대영웅생성
 function createRivalHero() {
   const hero = createCard(true, false);
-  rival_hero_data = hero;
+  rival.hero_data = hero;
 
-  connectCardToDom(rival_hero_data, rival_hero, true);
+  connectCardToDom(rival.hero_data, rival.hero, true);
 }
 
 //내덱생성
 function createMyDeck(cnt) {
   for (let i = 0; i < cnt; ++i) {
     const deck = createCard(false, true);
-    my_deck_datas.push(deck);
+    my.deck_datas.push(deck);
   }
 
-  my_deck_datas.forEach(function (data) {
-    connectCardToDom(data, my_deck, false);
+  my.deck_datas.forEach(function (data) {
+    connectCardToDom(data, my.deck, false);
   });
 }
 
 //내영웅 생성
 function createMyHero() {
   const hero = createCard(true, true);
-  my_hero_data = hero;
+  my.hero_data = hero;
 
-  connectCardToDom(my_hero_data, my_hero, true);
+  connectCardToDom(my.hero_data, my.hero, true);
 }
 
 //생성자 패턴
