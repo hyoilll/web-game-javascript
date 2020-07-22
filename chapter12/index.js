@@ -8,10 +8,10 @@ const rival = {
   cost: document.querySelector(".rival-cost"),
   //data
   deck_datas: [],
-  hero_data: [],
+  hero_data: null,
   field_datas: [],
   //attack-card
-  attackCard: null,
+  attackCard: [],
 };
 
 const my = {
@@ -22,10 +22,10 @@ const my = {
   cost: document.querySelector(".my-cost"),
   //data
   deck_datas: [],
-  hero_data: [],
+  hero_data: null,
   field_datas: [],
   //attack-card
-  attackCard: null,
+  attackCard: [],
 };
 
 const turnBtn = document.querySelector(".turn");
@@ -37,13 +37,21 @@ let turn = true;
 
 //btn - click event => 턴 넘기기
 turnBtn.addEventListener("click", function (e) {
-  //턴을 넘길 때 마다 코스트를 채워줌
+  //턴을 넘길 때 마다 코스트를 채워주고, 공격했던 카드들 초기화해줌
   if (turn) {
     //내 코스트 채움
     my.cost.textContent = 10;
+    my.attackCard.forEach(function (card) {
+      card.classList.remove("card-turnover", "card-selected");
+    });
+    my.attackCard = [];
   } else {
     //상대 코스트 채움
     rival.cost.textContent = 10;
+    rival.attackCard.forEach(function (card) {
+      card.classList.remove("card-turnover", "card-selected");
+    });
+    rival.attackCard = [];
   }
 
   //공수교대
@@ -64,6 +72,15 @@ function disconnetionCardToDom(card, dom) {
       e.remove();
     }
   });
+}
+
+// selected card counting
+function conutingSelectedCard(obj) {
+  const fieldSelectLen =
+    obj.field.querySelectorAll(".card-selected").length +
+    obj.hero.querySelectorAll(".card-selected").length;
+
+  return fieldSelectLen;
 }
 
 //deck -> field
@@ -139,15 +156,29 @@ function connectCardToDom(data, dom, isHero) {
       }
     } else {
       if (turn) {
-        //내 턴이여서 공격카드를 먼저 선택해야 하는데
-        //내 공격카드 선택안하고 상대방카드 먼저 선택하면 return
-        if (my.attackCard === null && !data.isTurn) {
-          return;
+        // 내 턴인데 이번에 선택한 카드가 적 카드 일 경우 => 공격의 의미
+        // but 내 필드에서 선택한 카드가 없으면 return
+        if (!data.isTurn) {
+          const fieldSelectLen = conutingSelectedCard(my);
+
+          if (fieldSelectLen === 0) {
+            return;
+          }
         }
       } else {
-        if (rival.attackCard === null && data.isTurn) {
-          return;
+        // 상대 턴인데 이번에 선택한 카드가 내 카드 일 경우 => 공격의 의미
+        // but 상대 필드에서 선택한 카드가 없으면 return
+        if (data.isTurn) {
+          const fieldSelectLen = conutingSelectedCard(rival);
+          if (fieldSelectLen === 0) {
+            return;
+          }
         }
+      }
+
+      //이미 공격했던 카드 다시 선택하려고 하면 return
+      if (card.classList.contains("card-turnover")) {
+        return;
       }
 
       //field, hero 영역의 카드를 선택하면 공격할 수 있도록 표시해줌
@@ -161,15 +192,17 @@ function connectCardToDom(data, dom, isHero) {
       //data.isTurn : true = my / false = rival
       if (turn !== data.isTurn) {
         //공격
-        console.log("attack");
 
+        //공격카드 추가
         const attObj = turn === true ? my : rival;
         const attPower = Number(
-          attObj.attackCard.querySelector(".card-att").textContent
+          attObj.attackCard[attObj.attackCard.length - 1].querySelector(
+            ".card-att"
+          ).textContent
         );
-
         data.hp = Number(data.hp) - attPower;
 
+        //공격 턴에 맞춰서 상태 object 할당
         const hitObj = attObj === my ? rival : my;
 
         //if hp가 1보다 작아지면 카드 없어짐
@@ -181,6 +214,7 @@ function connectCardToDom(data, dom, isHero) {
             } else {
               alert("rival팀이 이겼습니다");
             }
+            init();
             return;
           } else {
             //data에 맞는 index를 찾아서 datas[]에서 삭제
@@ -194,26 +228,26 @@ function connectCardToDom(data, dom, isHero) {
         card.querySelector(".card-hp").textContent = String(data.hp);
 
         //공격 했으니 턴 넘겨주고
-        turnBtn.click();
+        //turnBtn.click();
 
-        //카드 선택해제
-        attObj.attackCard.classList.toggle("card-selected");
+        //공격했으니 카드 선택해제하고, 회색으로 칠해 줌 중복공격 못하게
+        attObj.attackCard[attObj.attackCard.length - 1].classList.add(
+          "card-turnover"
+        );
+        attObj.attackCard[attObj.attackCard.length - 1].classList.toggle(
+          "card-selected"
+        );
         card.classList.toggle("card-selected");
 
-        //attack 카드 초기화
-        rival.attackCard = null;
-        my.attackCard = null;
         return;
       }
 
       if (turn) {
         //my 카드에 attack카드 추가
-        my.attackCard = card;
-        console.log("true");
+        my.attackCard.push(card);
       } else {
         //rival 카드에 attack카드 추가
-        rival.attackCard = card;
-        console.log("false");
+        rival.attackCard.push(card);
       }
     }
   });
@@ -287,8 +321,31 @@ function createCard(isHero, isTurn) {
   return new Card(isHero, isTurn);
 }
 
+//my-rival 정보 초기화
+function dataInit() {
+  my.hero.innerHTML = "";
+  my.field.innerHTML = "";
+  my.deck.innerHTML = "";
+
+  my.deck_datas = [];
+  my.hero_data = null;
+  my.field_datas = [];
+  my.attackCard = [];
+
+  rival.hero.innerHTML = "";
+  rival.field.innerHTML = "";
+  rival.deck.innerHTML = "";
+
+  rival.deck_datas = [];
+  rival.hero_data = null;
+  rival.field_datas = [];
+  rival.attackCard = [];
+}
+
 //초기세팅
 function init() {
+  dataInit();
+
   createRivalDeck(5);
   createRivalHero();
   createMyDeck(5);
