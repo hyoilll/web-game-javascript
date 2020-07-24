@@ -1,0 +1,2 @@
+[참고] https://www.zerocho.com/category/JavaScript/post/573b3235a54b5e8427432947
+const fragment = document.createDocumentFragment();
