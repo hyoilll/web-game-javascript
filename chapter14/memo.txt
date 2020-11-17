@@ -1,0 +1,16 @@
+keyup - 키를 눌렀다 땔 때 이벤트 발생
+keydown - 키를 누를때 이벤트 발생 (꾹 누르고 있으면 계속 발생)
+keypress - 방향키만 인식안함. 다른키는 인식함
+
+---------new syntax------------
+[...Array(num).keys()]
+0 ~ num - 1
+==
+let arr[num];
+for (let i = 0 ; i < num; ++i)
+{
+    arr[i] = i;
+}
+
+[...Array(num).keys()].map(v => v + 1)
+1 ~ num

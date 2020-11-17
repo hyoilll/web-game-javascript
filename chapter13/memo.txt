@@ -1,2 +1,8 @@
 [참고] https://www.zerocho.com/category/JavaScript/post/573b3235a54b5e8427432947
 const fragment = document.createDocumentFragment();
+
+mouser drag event
+ screenX - 모니터 기준 좌표
+ pageX - 페이지(스크롤 포함)
+ clientX - 브라우저 화면 기문
+ offsetX - 이벤트 타켓 기준
