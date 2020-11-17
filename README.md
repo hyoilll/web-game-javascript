@@ -6,13 +6,11 @@ https://hyoilll.github.io/web-game-javascript/chapter03/index.html
 
 # Tic Tac Toe
 
-# human:human
+1. human:human
+   https://hyoilll.github.io/web-game-javascript/chapter05/index.html
 
-https://hyoilll.github.io/web-game-javascript/chapter05/index.html
-
-# human:com
-
-https://hyoilll.github.io/web-game-javascript/chapter10/index.html
+2. human:com
+   https://hyoilll.github.io/web-game-javascript/chapter10/index.html
 
 # じゃんけん
 
